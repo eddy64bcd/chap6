@@ -75,14 +75,14 @@ h1 > span {
 	font-family: 'Work Sans';
 	font-size:10px;
 	letter-spacing: 0.1em;
-;
+
 }
 
 h2{
 	font-family: 'Syne';
 	font-weight: 700;
 	font-size: 30px;
-	color: #1D6154
+	color: #1D6154;
 }
 nav ul {
 	display: flex;
@@ -93,6 +93,7 @@ nav ul {
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
+	cursor: pointer;
 }
 
 li:hover {
@@ -125,6 +126,28 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
+.btn-content {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 2em;
+}
+.btn{
+	font-family: 'Syne';
+	font-weight: 700;
+	color: #1D6154;
+	background-color: transparent;
+	border: 2px solid #1D6154;
+	padding: 10px 20px;
+	margin: 0 10px;
+	border-radius: 60px ;
+	cursor: pointer;
+}
+
+.btn:hover {
+	background-color: #1D6154;
+	color: white;
+}
+
 .gallery {
 	width: 100%;
 	display: grid;
@@ -137,17 +160,24 @@ li:hover {
 	width: 100%;
 
 }
+
+
+
 #contact {
 	width: 50%;
-margin: auto;
+    margin: auto;
+	
 }
+
 #contact > * {
 	text-align: center;
 
 }
+
 #contact h2{
 	margin-bottom: 20px;
 }
+
 #contact form {
 	text-align: left;
 	margin-top:30px;
@@ -161,9 +191,11 @@ margin: auto;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
+
 #contact label {
 	margin: 2em 0 1em 0;
 }
+
 #contact textarea {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
@@ -185,4 +217,81 @@ footer nav ul {
 	justify-content: flex-end;
 	margin: 2em
 }
+.container{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.btn-login {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-family: 'Syne';
+	font-weight: 700;
+	color: white;
+	background-color: #1D6154;
+	border: 2px solid #1D6154;
+	padding: 10px 40px;
+	margin: 20px 10px;
+	border-radius: 60px ;
+	cursor: pointer;
+}
 
+.login{
+	display: flex;
+	width: 80%;
+	height: 800px;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	margin: 2em 0;
+
+}
+.login h2 {
+	font-family: 'Syne';
+	font-weight: 700;
+	font-size: 30px;
+	color: #1D6154;
+	margin-bottom: 1em;
+}
+.form-group {
+	display: flex;
+	flex-direction: column;
+	width: 300px;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 2em;
+	
+}	
+
+.form-group input {
+	width: 100%;
+	height: 35px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+.form-group label {
+	margin-bottom: 0.5em;
+	display: flex;
+    align-self: start;
+}
+.forgot-password {
+	display: flex;
+	font-size: 0.9em;
+	color: #1D6154;
+	margin-top: 2em;
+}
+
+.login-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+}
+
+#login-link {
+	cursor: pointer;
+}
