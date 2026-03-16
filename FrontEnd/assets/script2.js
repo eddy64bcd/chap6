@@ -11,6 +11,7 @@ btnProjets.addEventListener("click", () => {
   window.location.href = "index.html";
 });
 
+
 // Récupération des pièces depuis le fichier JSON
 const response = await fetch("http://localhost:5678/api/works");
 const pieces = await response.json();
@@ -30,12 +31,14 @@ function genererPieces(pieces) {
     sectionFiches.appendChild(pieceElement);
     pieceElement.appendChild(imageElement);
     pieceElement.appendChild(nomElement);
+
   }
 }
 
 genererPieces(pieces);
 console.log(pieces);
 
+  
 //gestion des Filtres////////////////////////
 const btnObjets = document.querySelector(".objets");
 
@@ -44,31 +47,25 @@ const category = await reponse.json();
 
 btnObjets.addEventListener("click", function () {
   const pieceObjets = category.filter((item) => item.categoryId === 1);
-
   document.querySelector(".gallery").innerHTML = "";
   genererPieces(pieceObjets);
 });
 
 const btnAppartements = document.querySelector(".appartements");
-
 btnAppartements.addEventListener("click", function () {
   const pieceAppartements = category.filter((item) => item.categoryId === 2);
-
   document.querySelector(".gallery").innerHTML = "";
   genererPieces(pieceAppartements);
 });
 
 const btnHotels = document.querySelector(".hotels");
-
 btnHotels.addEventListener("click", function () {
   const pieceHotels = category.filter((item) => item.categoryId === 3);
-
   document.querySelector(".gallery").innerHTML = "";
   genererPieces(pieceHotels);
 });
 
 const btnTous = document.querySelector(".tous");
-
 btnTous.addEventListener("click", function () {
   document.querySelector(".gallery").innerHTML = "";
   genererPieces(category);
@@ -108,16 +105,13 @@ function pageLogin() {
 }
 
 function validLogin() {
-  localStorage.removeItem("token");
-  console.log(localStorage);
-
-  const formulaireLogin = document.querySelector(".login-content");
+   const formulaireLogin = document.querySelector(".login-content");
 
   formulaireLogin.addEventListener("submit", function (event) {
     event.preventDefault();
     // Création de la demande de connexion à l'API
 
-    const log = {
+    const secret = {
       email: document.getElementById("email").value,
       password: document.getElementById("password").value,
     };
@@ -125,7 +119,7 @@ function validLogin() {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    const raw = JSON.stringify(log);
+    const raw = JSON.stringify(secret);
     console.log(raw);
 
     const requestOptions = {
@@ -135,18 +129,20 @@ function validLogin() {
       redirect: "follow",
     };
 
-    fetch("http://localhost:5678/api/users/login", requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        if (result.token) {
-          localStorage.setItem("token", result.token);
-          perso();
-        } else {
-          alert("Email ou mot de passe incorrect");
-        }
-      })
-      .catch((error) => console.log("error", error));
+  fetch("http://localhost:5678/api/users/login", requestOptions)
+    .then(response => response.json())
+    .then(result => {
+	  console.log(result);
+	  if (result.token) {
+		localStorage.setItem("token", result.token);
+	perso();
+
+	} else {
+		alert("Email ou mot de passe incorrect");
+	}
+  })
+  .catch(error => console.log("error", error));
+   
   });
 
   //**********Personnalisation de l'accueil**********//
@@ -175,13 +171,19 @@ function validLogin() {
 
   function deconnexion() {
     localStorage.removeItem("token");
-    btnLogin.textContent = "login";
+    window.location.href = "index.html";
     document.querySelector(".banner-edition").style.display = "none"; // Cache la bannière d'édition si le token est absent
     btnModif.style.display = "none"; // Cache le bouton de modification si le token est absent
     document.querySelectorAll(".filter").forEach((filter) => {
       filter.style.display = "block";
-    }); // Affiche les boutons de filtrage si le token est absent
+    }); 
     homePage.style.display = "block";
+    btnLogin.textContent = "login";
+    btnLogin.addEventListener("click", () => {
+    pageLogin();
+    validLogin();
+ });
+
   }
 }
 
@@ -193,7 +195,11 @@ const modalTitle = document.querySelector(".modal-title");
 const modale = document.querySelector(".modale");
 const spanClose = document.querySelector(".close");
 
-function modalGalery() {
+btnModif.addEventListener("click", () => {
+  modalGalery(pieces);
+});
+
+function modalGalery(pieces) {
   modale.style.display = "block";
   modalGaleryContent.innerHTML = "";
   btnValidModal.textContent = "Ajouter une photo";
@@ -202,49 +208,82 @@ function modalGalery() {
   genererPieces(pieces);
   for (let i = 0; i < pieces.length; i++) {
     const work = pieces[i];
- 
+
     const workElement = document.createElement("div");
     workElement.classList.add("gallery-item");
     const imgElement = document.createElement("img");
     imgElement.src = work.imageUrl;
     const trashContainer = document.createElement("div");
     trashContainer.classList.add("trash-container");
-    trashContainer.id =work.id;
+    trashContainer.id = work.id;
     trashContainer.innerHTML = `<i class="fa-solid fa-trash-can  trash-icone"></i>`;
 
     modalGaleryContent.appendChild(workElement);
-
     workElement.appendChild(imgElement);
     workElement.appendChild(trashContainer);
-
+        
     btnValidModal.addEventListener("click", () => {
       ajoutPhoto();
     });
 
     spanClose.addEventListener("click", () => {
       modale.style.display = "none";
+      document.querySelector(".gallery").innerHTML = "";
+      genererPieces(pieces);
     });
+    
     window.addEventListener("click", (event) => {
       if (event.target === modale) {
         modale.style.display = "none";
+        document.querySelector(".gallery").innerHTML = "";
+        genererPieces(pieces);
       }
     });
 
-
-  trashContainer.addEventListener("click", (event) => {
-    let imgRemoveId = event.target.parentElement.id;
-    console.log(imgRemoveId);
- 
+    trashContainer.addEventListener("click", (event) => {
+      let imgRemoveId = event.target.parentElement.id;
+    
+      const numberId = parseInt(imgRemoveId, 10);
+         
+      let listId = pieces.map(piece => piece.id);
+         
+      let index = listId.indexOf(numberId);
+      pieces.splice(index,1);
      
-  });
+       modalGalery(pieces);
+    
+  
 
 
+      const urlApi = "http://localhost:5678/api/works/";
+      const token =window.localStorage.getItem("token");
+
+const deleteWork = async () => {
+try {
+  const result = await fetch(urlApi + imgRemoveId,{
+        method: `DELETE`,
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+         },
+});
+     if (result.ok) {
+        console.log('Post deleted successfully.');
+   
+        deleteWork();
+
+
+    } else {
+      console.error('Failed to delete post. Status:', result.status);
+    }
+    } catch (error) {
+    console.error('Error deleting post:', error);
   }
 }
 
-btnModif.addEventListener("click", () => {
-  modalGalery();
+
 });
+ 
 
 const modalPhoto = document.querySelector(".modal-ajout-photo");
 const arrowLeft = document.querySelector(".arrow-left");
@@ -261,8 +300,12 @@ function ajoutPhoto() {
     event.preventDefault();
     modalPhoto.innerHTML = "";
     modalGaleryContent.innerHTML = "";
+    arrowLeft.style.display = "none";
     modalGalery();
   });
+};
+  }
+
 }
 
 
