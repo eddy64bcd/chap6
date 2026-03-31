@@ -3,87 +3,12 @@
    License: none (public domain)
 */
 
-html,
-body,
-div,
-span,
-applet,
-object,
-iframe,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-blockquote,
-pre,
-a,
-abbr,
-acronym,
-address,
-big,
-cite,
-code,
-del,
-dfn,
-em,
-img,
-ins,
-kbd,
-q,
-s,
-samp,
-small,
-strike,
-strong,
-sub,
-sup,
-tt,
-var,
-b,
-u,
-i,
-center,
-dl,
-dt,
-dd,
-ol,
-ul,
-li,
-fieldset,
-form,
-label,
-legend,
-table,
-caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td,
-article,
-aside,
-canvas,
-details,
-embed,
-figure,
-figcaption,
-footer,
-header,
-hgroup,
-menu,
-nav,
-output,
-ruby,
-section,
-summary,
-time,
-mark,
-audio,
-video {
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,
+pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,
+small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,
+form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,
+embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,
+time,mark,audio,video {
   margin: 0;
   padding: 0;
   border: 0;
@@ -93,17 +18,7 @@ video {
 }
 /* HTML5 display-role reset for older browsers */
 
-article,
-aside,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-menu,
-nav,
-section {
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {
   display: block;
 }
 
@@ -111,20 +26,15 @@ body {
   line-height: 1;
 }
 
-ol,
-ul {
+ol,ul {
   list-style: none;
 }
 
-blockquote,
-q {
+blockquote,q {
   quotes: none;
 }
 
-blockquote:before,
-blockquote:after,
-q:before,
-q:after {
+blockquote:before,blockquote:after,q:before,q:after {
   content: "";
   content: none;
 }
@@ -264,6 +174,7 @@ li:hover {
 }
 
 .btn {
+  display: flex;
   font-family: "Syne";
   font-weight: 700;
   color: #1d6154;
@@ -273,6 +184,7 @@ li:hover {
   margin: 0 10px;
   border-radius: 60px;
   cursor: pointer;
+  
 }
 
 .projet-title {
@@ -281,6 +193,7 @@ li:hover {
   align-items: baseline;
   gap: 10px;
 }
+
 .projet-title h2 {
   margin-right: 30px;
 }
@@ -294,6 +207,7 @@ li:hover {
   font-weight: 400;
   cursor: pointer;
 }
+
 .modif,
 .projet-title i {
   display: none;
@@ -470,6 +384,16 @@ footer nav ul {
   cursor: pointer;
 }
 
+.messageError{
+  color: red;
+  border: 2px solid red;
+  font-size: 20px;
+  padding: 10px;
+  border-radius: 20px;
+  display: none;
+
+}
+
 /*******  page modale ***/
 
 .modale {
@@ -487,23 +411,19 @@ footer nav ul {
 
 .modal-content {
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
   background-color: #fefefe;
   padding: 20px;
   border-radius: 15px;
-  width: 1000px;
+  width: 800px;
+  height: 800px;
   margin: 150px auto;
   max-width: calc(100vw - 20px);
   max-height: calc(100vh -20px);
+
 }
 
-.modal-content hr {
-  color: #383838;
-  width: 65%;
-  margin-top: 60px;
-}
 
 .modal-galery {
   width: 70%;
@@ -526,8 +446,7 @@ footer nav ul {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 20px;
-}
+  }
 
 .modal-entete h3 {
   font-family: "work sans";
@@ -557,7 +476,7 @@ footer nav ul {
   width: 100%;
 }
 
-.btn-validation {
+.btn-ajouter-photo {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -567,7 +486,7 @@ footer nav ul {
   color: #ffffff;
   background-color: #1d6154;
   padding: 10px 70px;
-  margin: 20px 10px;
+  margin: 20px 0 20px 220px;
   border-radius: 60px;
   cursor: pointer;
   margin-top: 40px;
@@ -605,20 +524,28 @@ footer nav ul {
   cursor: pointer;
 }
 
-#add-photo-form {
+.form-add-work {
   display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   flex-direction: column;
 }
 
 .modal-ajout-photo {
   display: flex;
-  width: 65%;
+  justify-content: center;
+  align-items: center;
+  width: 85%;
   display: none;
+
 }
 
 .image-preview {
+  position: relative;  
   display: flex;
+  width: 80%;
+  height: 200px;
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -628,23 +555,97 @@ footer nav ul {
   padding: 20px;
 }
 
-.logo-paysage {
-  width: 20%;
+#logo-paysage {
+  display: flex;
+  width: 17%
 }
 
 .image-text {
   display: flex;
+  width: 80%;
   flex-direction: column;
   padding: 10px 0;
 }
 
 .cont-text {
-  height: 51px;
+  display: flex;
+  height: 60px;
   border: none;
   box-shadow: 0px 4px 14px 0px #00000017;
   margin-top: 15px;
 }
 
+.cont-text option{
+  display: flex;
+
+}
+
 .image-text label {
   margin-top: 15px;
+}
+
+.btn-validation{
+  display: flex;
+  width: 40%;
+  justify-content: center;
+  align-items: center;
+  border-style: none;
+  font-family: "Syne";
+  font-weight: bold;
+  font-weight: 700;
+  color: #ffffff;
+  background: #A7A7A7;
+  padding: 10px 70px;
+  margin: 20px 10px;
+  border-radius: 60px;
+  cursor: pointer;
+  margin-top: 50px;
+}
+
+.content-ajout-photo{
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+}
+
+#btn-ajout-image{
+ display: flex;
+ width: 200px;
+}
+
+.tiret-ajout-photo {
+  display: flex;
+  height: 3px;
+  background-color: #B3B3B3;
+  margin-top: 50px; 
+  width: 700px;
+}
+
+.tiret-btn-validation{
+  display: flex;
+  height: 3px;
+  background-color: #B3B3B3;
+  margin-top: 70px; 
+  width: 550px;
+}
+
+#file {
+display: none;
+
+}
+
+.cont-preview{
+  display: none;
+  position: absolute;
+ 
+  
+}
+
+.preview-image {
+  position: relative;
+  left: 200px;
+  width: 31%;
+  height: 35%;
+  
+  
 }

@@ -69,30 +69,38 @@
 				  <span class="close">&times;</span>
 				  <h3 class="modal-title"></h3>
 			    </div>
-				<div class="modal-galery"></div>
-			 	<div class="modal-ajout-photo">
-				  <form id="add-photo-form">
-	               <div class="image-preview">
-	                 <img class="logo-paysage"src="./assets/icons/logo-paysage.png" alt="logo paysage">   
-   	                 <img class="btn-ajout-photo" src="./assets/icons/btn-ajout-photo.png" alt="bouton ajout photo">  
-	                 <p>jpg,png : 4mo max</p>
-	               </div>
-	               <div class="image-text">
-	               <label for="title">Titre</label>
-	               <input class="cont-text photo-title">
-	               <label for="category">Catégorie</label>
-	              <select class="cont-text photo-category" name="category" required>
-		             <option value=""></option>
-		             <option value="1">Objets</option>
-		             <option value="2">Appartements</option>
-		             <option value="3">Hotels & restaurants</option>
-	              </select>
-	            </div>
-                  </form>
-	           </div>
-			    <hr>
-				<button class="btn btn-validation"></button>
 				
+				<div class="modal-galery"></div>
+			 	
+				<div class="modal-ajout-photo">
+				  <form class="form-add-work"  method="post" name="fileinfo">
+			         <div class="image-preview">
+	                   <img id="logo-paysage"src="./assets/icons/logo-paysage.png" alt="logo paysage">
+					   <div class="cont-preview"></div> 
+					   <label for="file"><img src="./assets/icons/btn-ajout-photo.png" alt="bouton ajout photo"></label>
+					   <input type="file" id="file" name="file" required>
+					   <p>jpg, png : 4mo max</p>
+	                 </div>
+	                 <div class="image-text">
+	                   <label for="title">Titre</label>
+	                   <input class="cont-text photo-title" id="title" name="title" required>
+	                   <label for="category">Catégorie</label>
+	                   <select class="cont-text photo-category" id="category" name="category" required>
+		                 <option value=""></option>
+		                 <option value="1">Objets</option>
+		                 <option value="2">Appartements</option>
+		                 <option value="3">Hotels & restaurants</option>
+	                   </select>
+				     </div>
+                     <div class="tiret-btn-validation"></div>
+			         <button class="btn btn-validation">Valider</button>
+                   </form>
+	            </div>
+				
+				<div class="content-ajout-photo">
+			       <div class="tiret-ajout-photo"></div>
+			       <button class="btn btn-ajouter-photo">Ajouter une photo</button>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -100,8 +108,8 @@
 		<h2>Contact</h2>
 		<p>Vous avez un projet ? Discutons-en !</p>
 		<form action="#" method="post">
-			<label for="name">Nom</label>
-			<input type="text" name="name" id="name">
+			<label for="nom">Nom</label>
+			<input type="text" name="nom" id="nom">
 			<label for="e-mail">Email</label>
 			<input type="e-mail" name="e-mail" id="e-mail">
 			<label for="message">Message</label>
