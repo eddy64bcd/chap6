@@ -386,10 +386,8 @@ footer nav ul {
 
 .messageError{
   color: red;
-  border: 2px solid red;
-  font-size: 20px;
+  font-size: 15px;
   padding: 10px;
-  border-radius: 20px;
   display: none;
 
 }
@@ -442,6 +440,8 @@ footer nav ul {
 
 .modal-entete {
   display: flex;
+  margin-top: 10px;
+  position: relative;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
@@ -455,18 +455,11 @@ footer nav ul {
   color: black;
 }
 
-.modal-entete span {
-  font-size: 30px;
-  font-weight: bold;
-  color: #aaa;
-  cursor: pointer;
-  align-self: flex-end;
-}
+
 
 .arrow-left {
   align-self: flex-start;
-  position: relative;
-  top: 20px;
+  position: absolute;
   cursor: pointer;
   display: none;
 }
@@ -493,15 +486,16 @@ footer nav ul {
 }
 
 .close {
-  color: #aaa;
-  float: right;
+  position: absolute;
+  right : 20px;
+  color : black;
   font-size: 28px;
   font-weight: bold;
   cursor: pointer;
 }
 
 .close:hover {
-  color: black;
+  color: rgb(143, 139, 139);
 }
 
 .trash-container {

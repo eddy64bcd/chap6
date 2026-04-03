@@ -84,24 +84,24 @@ function pageLogin() {
   formSection.classList.add("login-content");
   const formGroup1 = document.createElement("div");
   formGroup1.classList.add("form-group");
-
   formGroup1.innerHTML = `<label for="email">E-mail</label>
                         <input type="email" name="email" id="email" required>`;
-
   const formGroup2 = document.createElement("div");
   formGroup2.classList.add("form-group");
-
   formGroup2.innerHTML = `<label for="password">Mot de passe</label>
-                        <input type="password" name="password" id="password" required>
-                        <button id="btn-login" type="submit">Se connecter</button>
-                        <a class="forgot-password" href="#">Mot de passe oublié </a>`;
+                        <input type="password" name="password" id="password" required>`
+  const formGroup3 = document.createElement("div");
+  formGroup3.classList.add("form-group");
+  formGroup3.innerHTML = `<button type="submit" id="btn-login">Se connecter</button>;
+                        <a class="forgot-password" href="#">Mot de passe oublié </a>`;  
 
-  loginPage.appendChild(loginSection);
+  loginPage.appendChild(loginSection); 
   loginSection.appendChild(titleSection);
-  loginSection.appendChild(messageError);
   loginSection.appendChild(formSection);
   formSection.appendChild(formGroup1);
   formSection.appendChild(formGroup2);
+  formSection.appendChild(messageError);
+  formSection.appendChild(formGroup3);
 }
 
 function validLogin() {
@@ -115,21 +115,19 @@ function validLogin() {
       email: document.getElementById("email").value,
       password: document.getElementById("password").value,
     };
-    console.log(secret);
-
+   
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     const raw = JSON.stringify(secret);
-    console.log(raw);
-
+   
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: raw,
       redirect: "follow",
     };
-    console.log(requestOptions);
+    console.log("toto", requestOptions);
     fetch("http://localhost:5678/api/users/login", requestOptions)
       .then((response) => response.json())
       .then((result) => {
@@ -328,6 +326,7 @@ file.addEventListener("change", function () {
 
 //fonction ajout travaux///////
 
+
 formWork.addEventListener("submit", (e) => {
   e.preventDefault();
   const title = document.getElementById("title").value;
@@ -349,13 +348,13 @@ formWork.addEventListener("submit", (e) => {
     .then((response) => response.json())
     .then((data) => {
       console.log("Work added successfully:", data);
-      pieces.push(data);
-      modalPhoto.style.display = "none";
-      modalGalery(pieces);
+    
+   
     })
     .catch((error) => {
       console.error("Error adding work:", error);
     });
 
-  
+    
 });
+
