@@ -1,320 +1,205 @@
-let pieces = window.localStorage.getItem("pieces");
+// ── DOM refs ──────────────────────────────────────────────────
+const gallery = document.querySelector(".gallery");
+const btnModif = document.querySelector(".modif");
+const modale = document.querySelector(".modale");
+const modalGaleryContent = document.querySelector(".modal-galery");
+const modalTitle = document.querySelector(".modal-title");
+const spanClose = document.querySelector(".close");
+const arrowLeft = document.querySelector(".arrow-left");
+const modalPhoto = document.querySelector(".modal-ajout-photo");
+const contentAjoutPhoto = document.querySelector(".content-ajout-photo");
+const btnAjouterPhoto = document.querySelector(".btn-ajouter-photo");
+const imagePreview = document.querySelector(".cont-preview");
+const file = document.getElementById("file");
+const formWork = document.querySelector(".form-add-work");
+const btnLoginLink = document.getElementById("login-link");
 
-const response = await fetch("http://localhost:5678/api/works/");
-pieces = await response.json();
+let pieces = [];
 
-function genererPieces(pieces) {
-  for (let i = 0; i < pieces.length; i++) {
-    const article = pieces[i];
-
-    const sectionFiches = document.querySelector(".gallery");
-
-    const pieceElement = document.createElement("article");
-    const imageElement = document.createElement("img");
-    imageElement.src = article.imageUrl;
-    const nomElement = document.createElement("p");
-    nomElement.innerText = article.title;
-
-    sectionFiches.appendChild(pieceElement);
-    pieceElement.appendChild(imageElement);
-    pieceElement.appendChild(nomElement);
+// ──  Appel Fetch & affichage de la galerie ────────────────────────────────────────────────//  
+async function fetchWorks() {
+  try {
+    const response = await fetch("http://localhost:5678/api/works");
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return await response.json();
+  } catch (err) {
+    console.error("Error fetching works:", err);
+    return [];
   }
 }
 
-genererPieces(pieces);
+function genererPieces(works) {
+  gallery.innerHTML = "";
+  works.forEach((work) => {
+    const article = document.createElement("article");
+    const img = document.createElement("img");
+    img.src = work.imageUrl;
+    img.alt = work.title;
+    const p = document.createElement("p");
+    p.innerText = work.title;
+    article.appendChild(img);
+    article.appendChild(p);
+    gallery.appendChild(article);
+  });
+}
 
-const btnModif = document.querySelector(".modif");
-// Navigation vers la page de login//
-const btnLogin = document.getElementById("login-link");
-btnLogin.addEventListener("click", () => {
-  pageLogin();
-  validLogin();
+// ── initiation de la galerie ─────────────────────────────
+fetchWorks().then((works) => {
+  pieces = works;
+  genererPieces(pieces);
 });
-// Navigation vers la page de projets//
-const btnProjets = document.getElementById("projets-link");
-btnProjets.addEventListener("click", () => {
+
+// ── Boutons de filtre ────────────────────────────────────────────
+document.querySelector(".tous").addEventListener("click", () => {
+  genererPieces(pieces);
+});
+
+document.querySelector(".objets").addEventListener("click", () => {
+  genererPieces(pieces.filter((w) => w.categoryId === 1));
+});
+
+document.querySelector(".appartements").addEventListener("click", () => {
+  genererPieces(pieces.filter((w) => w.categoryId === 2));
+});
+
+document.querySelector(".hotels").addEventListener("click", () => {
+  genererPieces(pieces.filter((w) => w.categoryId === 3));
+});
+
+// ── Navigation ────────────────────────────────────────────────
+document.getElementById("projets-link").addEventListener("click", () => {
   window.location.href = "index.html";
 });
 
-//gestion des Filtres////////////////////////
-const reponse = await fetch("http://localhost:5678/api/works");
-const category = await reponse.json();
-
-const btnObjets = document.querySelector(".objets");
-btnObjets.addEventListener("click", function () {
-  const pieceObjets = category.filter((item) => item.categoryId === 1);
-  document.querySelector(".gallery").innerHTML = "";
-  genererPieces(pieceObjets);
-});
-
-const btnAppartements = document.querySelector(".appartements");
-btnAppartements.addEventListener("click", function () {
-  const pieceAppartements = category.filter((item) => item.categoryId === 2);
-  document.querySelector(".gallery").innerHTML = "";
-  genererPieces(pieceAppartements);
-});
-
-const btnHotels = document.querySelector(".hotels");
-btnHotels.addEventListener("click", function () {
-  const pieceHotels = category.filter((item) => item.categoryId === 3);
-  document.querySelector(".gallery").innerHTML = "";
-  genererPieces(pieceHotels);
-});
-
-const btnTous = document.querySelector(".tous");
-btnTous.addEventListener("click", function () {
-  document.querySelector(".gallery").innerHTML = "";
-  genererPieces(category);
-});
-
-//////page Login//////////////
-const homePage = document.querySelector(".homePage");
-
-function pageLogin() {
-  homePage.style.display = "none";
-  const loginPage = document.querySelector(".loginPage");
-  const loginSection = document.createElement("section");
-  loginSection.classList.add("login");
-  const titleSection = document.createElement("h2");
-  titleSection.innerText = "Login";
-  const messageError = document.createElement("div");
-  messageError.innerText = "Email ou mot de passe incorrect";
-  messageError.classList.add("messageError");
-  const formSection = document.createElement("form");
-  formSection.classList.add("login-content");
-  const formGroup1 = document.createElement("div");
-  formGroup1.classList.add("form-group");
-  formGroup1.innerHTML = `<label for="email">E-mail</label>
-                        <input type="email" name="email" id="email" required>`;
-  const formGroup2 = document.createElement("div");
-  formGroup2.classList.add("form-group");
-  formGroup2.innerHTML = `<label for="password">Mot de passe</label>
-                        <input type="password" name="password" id="password" required>`
-  const formGroup3 = document.createElement("div");
-  formGroup3.classList.add("form-group");
-  formGroup3.innerHTML = `<button type="submit" id="btn-login">Se connecter</button>;
-                        <a class="forgot-password" href="#">Mot de passe oublié </a>`;  
-
-  loginPage.appendChild(loginSection); 
-  loginSection.appendChild(titleSection);
-  loginSection.appendChild(formSection);
-  formSection.appendChild(formGroup1);
-  formSection.appendChild(formGroup2);
-  formSection.appendChild(messageError);
-  formSection.appendChild(formGroup3);
-}
-
-function validLogin() {
-  const formulaireLogin = document.querySelector(".login-content");
-
-  formulaireLogin.addEventListener("submit", function (event) {
-    event.preventDefault();
-    // Création de la demande de connexion à l'API
-
-    const secret = {
-      email: document.getElementById("email").value,
-      password: document.getElementById("password").value,
+// ── Vérification de l'état de connexion ──────────────────────
+function checkLoginState() {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    btnLoginLink.textContent = "login";
+    btnLoginLink.onclick = () => {
+      window.location.href = "login.html";
     };
-   
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    const raw = JSON.stringify(secret);
-   
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-    console.log("toto", requestOptions);
-    fetch("http://localhost:5678/api/users/login", requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.token) {
-          localStorage.removeItem("token");
-          localStorage.setItem("token", result.token);
-          console.log(result.token);
-          perso();
-        } else {
-          const message = document.querySelector(".messageError");
-          message.style.display = "block";
-        }
-      })
-      .catch((error) => console.log("error", error));
-  });
-
-  //**********Personnalisation de l'accueil**********//
-  function perso() {
-    const iconeModif = document.querySelector(".icone-modif");
-    const loginPage = document.querySelector(".loginPage");
-    const btnFilter = document.querySelector(".btn-content");
-    if (localStorage.getItem("token")) {
-      document.getElementById("login-link").textContent = "logout"; // Transforme Login en Logout si le token est présent
-      document.querySelector(".banner-edition").style.display = "block"; // Affiche la bannière d'édition si le token est présent
-      loginPage.style.display = "none";
-      homePage.style.display = "block";
-      btnModif.style.display = "block";
-      iconeModif.style.display = "block";
-      btnFilter.style.display = "none";
-
-      if (btnLogin) {
-        btnLogin.addEventListener("click", () => {
-          deconnexion();
-        });
-      }
-    } else {
-      document.getElementById("login-link").textContent = "login"; // Affiche les boutons de filtrage si le token est absent
-    }
+    return;
   }
 
-  function deconnexion() {
+  // Utilisateur connecté — afficher les éléments d'édition
+  document.querySelector(".banner-edition").style.display = "block";
+  document.querySelector(".icone-modif").style.display = "block";
+  btnModif.style.display = "block";
+  document.querySelector(".btn-content").style.display = "none";
+  btnLoginLink.textContent = "logout";
+
+  //  utilisateur deconnecté — configurer affichage et token
+  btnLoginLink.onclick = () => {
     localStorage.removeItem("token");
     window.location.href = "index.html";
-    document.querySelector(".gallery").innerHTML = "";
-    genererPieces(pieces);
-    document.querySelector(".banner-edition").style.display = "none"; // Cache la bannière d'édition si le token est absent
-    btnModif.style.display = "none"; // Cache le bouton de modification si le token est absent
-    document.querySelectorAll(".filter").forEach((filter) => {
-      filter.style.display = "block";
-    });
-    homePage.style.display = "block";
-    btnLogin.textContent = "login";
-    btnLogin.addEventListener("click", () => {
-      pageLogin();
-      validLogin();
-    });
-  }
+  };
 }
 
-//**********Modale************/
+checkLoginState();
 
-const modalGaleryContent = document.querySelector(".modal-galery");
-const btnAjouterPhoto = document.querySelector(".btn-ajouter-photo");
-const modalTitle = document.querySelector(".modal-title");
-const modale = document.querySelector(".modale");
-const spanClose = document.querySelector(".close");
-const tiretEffacerPhoto = document.querySelector(".tiret-effacer-photo");
-const contentAjoutPhoto = document.querySelector(".content-ajout-photo");
-const modalPhoto = document.querySelector(".modal-ajout-photo");
-const arrowLeft = document.querySelector(".arrow-left");
-const btnValidation = document.querySelector(".btn-validation");
+// ── Fermeture de la modal ──────────────────────────────────────
+function closeModal() {
+  modale.style.display = "none";
+  modalPhoto.style.display = "none";
+  contentAjoutPhoto.style.display = "none";
+  arrowLeft.style.display = "none";
+  imagePreview.style.display = "none";
+  imagePreview.innerHTML = "";
+  modalGaleryContent.innerHTML = "";
+}
 
+spanClose.onclick = () => closeModal();
+
+window.addEventListener("click", (event) => {
+  if (event.target === modale) closeModal();
+});
+
+// ── affichage de la modal galerie ───────────────────────────────────────
 btnModif.addEventListener("click", () => {
   modalGalery(pieces);
 });
 
-function modalGalery(pieces) {
+function modalGalery(works) {
   modale.style.display = "block";
   modalGaleryContent.innerHTML = "";
   modalTitle.textContent = "Galerie photo";
   contentAjoutPhoto.style.display = "block";
   btnAjouterPhoto.style.display = "block";
+  modalPhoto.style.display = "none";
+  arrowLeft.style.display = "none";
 
-  genererPieces(pieces);
-  for (let i = 0; i < pieces.length; i++) {
-    const work = pieces[i];
+  btnAjouterPhoto.onclick = () => ajoutPhoto();
 
-    const workElement = document.createElement("div");
-    workElement.classList.add("gallery-item");
-    const imgElement = document.createElement("img");
-    imgElement.src = work.imageUrl;
-    const trashContainer = document.createElement("div");
-    trashContainer.classList.add("trash-container");
-    trashContainer.id = work.id;
-    trashContainer.innerHTML = `<i class="fa-solid fa-trash-can  trash-icone"></i>`;
+  works.forEach((work) => {
+    const workEl = document.createElement("div");
+    workEl.classList.add("gallery-item");
 
-    modalGaleryContent.appendChild(workElement);
-    workElement.appendChild(imgElement);
-    workElement.appendChild(trashContainer);
+    const img = document.createElement("img");
+    img.src = work.imageUrl;
+    img.alt = work.title;
 
-    btnAjouterPhoto.addEventListener("click", () => {
-      ajoutPhoto();
-    });
+    const trash = document.createElement("div");
+    trash.classList.add("trash-container");
+    trash.dataset.id = work.id;
+    trash.innerHTML = `<i class="fa-solid fa-trash-can trash-icone"></i>`;
 
-    spanClose.addEventListener("click", () => {
-      modale.style.display = "none";
-      modalPhoto.style.display = "none";
-      document.querySelector(".gallery").innerHTML = "";
-      contentAjoutPhoto.style.display = "none";
-      genererPieces(pieces);
-    });
+    workEl.appendChild(img);
+    workEl.appendChild(trash);
+    modalGaleryContent.appendChild(workEl);
 
-    window.addEventListener("click", (event) => {
-      if (event.target === modale) {
-        modale.style.display = "none";
-        document.querySelector(".gallery").innerHTML = "";
-        modalPhoto.style.display = "none";
-        contentAjoutPhoto.style.display = "none";
-        genererPieces(pieces);
+    trash.addEventListener("click", async () => {
+      const workId = parseInt(trash.dataset.id, 10);
+      const token = localStorage.getItem("token");
+
+      try {
+        const result = await fetch(`http://localhost:5678/api/works/${workId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (result.ok) {
+          pieces = pieces.filter((p) => p.id !== workId);
+          genererPieces(pieces);
+          modalGalery(pieces);
+        } else {
+          console.error("Failed to delete. Status:", result.status);
+        }
+      } catch (err) {
+        console.error("Error deleting work:", err);
       }
     });
-
-    trashContainer.addEventListener("click", (event) => {
-      let imgRemoveId = event.target.parentElement.id;
-      const numberId = parseInt(imgRemoveId, 10);
-      let listId = pieces.map((piece) => piece.id);
-      let index = listId.indexOf(numberId);
-      pieces.splice(index, 1);
-      modalGalery(pieces);
-
-      const urlApi = "http://localhost:5678/api/works/";
-      const token = window.localStorage.getItem("token");
-
-      const deleteWork = async () => {
-        try {
-          const result = await fetch(urlApi + imgRemoveId, {
-            method: `DELETE`,
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          });
-
-          if (result.ok) {
-            console.log("Post deleted successfully.");
-          } else {
-            console.error("Failed to delete post. Status:", result.status);
-          }
-        } catch (error) {
-          console.error("Error deleting post:", error);
-        }
-      };
-      deleteWork();
-    });
-
-    function ajoutPhoto() {
-      modalGaleryContent.innerHTML = "";
-      modalTitle.textContent = "Ajout photo";
-      arrowLeft.style.display = "block";
-      modalPhoto.style.display = "block";
-      btnAjouterPhoto.style.display = "none";
-      contentAjoutPhoto.style.display = "none";
-
-      arrowLeft.addEventListener("click", (event) => {
-        event.preventDefault();
-        modalPhoto.style.display = "none";
-        modalGaleryContent.innerHTML = "";
-        arrowLeft.style.display = "none";
-        imagePreview.style.display = "none";
-        modalGalery(pieces);
-      });
-    }
-  }
+  });
 }
 
-//image preview////////
-const file = document.getElementById("file");
-const token = localStorage.getItem("token");
-const formWork = document.querySelector(".form-add-work");
-const imagePreview = document.querySelector(".cont-preview");
+// ── affichage de la modal d'ajout photo ───────────────────────────────────────
+function ajoutPhoto() {
+  modalGaleryContent.innerHTML = "";
+  modalTitle.textContent = "Ajout photo";
+  arrowLeft.style.display = "block";
+  modalPhoto.style.display = "block";
+  btnAjouterPhoto.style.display = "none";
+  contentAjoutPhoto.style.display = "none";
 
+  arrowLeft.onclick = (e) => {
+    e.preventDefault();
+    imagePreview.style.display = "none";
+    imagePreview.innerHTML = "";
+    modalPhoto.style.display = "none";
+    arrowLeft.style.display = "none";
+    modalGalery(pieces);
+  };
+}
+
+// ── Aperçu de l'image ─────────────────────────────────────────────
 file.addEventListener("change", function () {
   const selectedFile = file.files[0];
   if (selectedFile) {
     const reader = new FileReader();
-    reader.onload = function (e) {
-      imagePreview.innerHTML = `<img src="${e.target.result}" alt="Image Preview" class="preview-image">`;
+    reader.onload = (e) => {
+      imagePreview.innerHTML = `<img src="${e.target.result}" alt="Preview" class="preview-image">`;
       imagePreview.style.display = "block";
     };
     reader.readAsDataURL(selectedFile);
@@ -324,37 +209,58 @@ file.addEventListener("change", function () {
   }
 });
 
-//fonction ajout travaux///////
-
-
-formWork.addEventListener("submit", (e) => {
+// ── Soumission du formulaire d'ajout de travaux ──────────────────────────────────────
+formWork.addEventListener("submit", async (e) => {
   e.preventDefault();
+
+
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    console.error("No token — user not authenticated.");
+    return;
+  }
+
   const title = document.getElementById("title").value;
-  const category = document.getElementById("category").value;
+  const categoryId = parseInt(document.getElementById("category").value, 10);
   const imageFile = file.files[0];
+
+  if (!title || !categoryId || !imageFile) {
+    console.error("Missing fields.");
+    return;
+  }
 
   const formData = new FormData();
   formData.append("title", title);
-  formData.append("category", category);
+  formData.append("category", categoryId);
   formData.append("image", imageFile);
 
-  fetch("http://localhost:5678/api/works/", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    body: formData,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Work added successfully:", data);
-    
-   
-    })
-    .catch((error) => {
-      console.error("Error adding work:", error);
+  try {
+    const response = await fetch("http://localhost:5678/api/works/", {
+      method: "POST",
+      headers: {
+       
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
     });
 
-    
+    if (!response.ok) {
+      const err = await response.json().catch(() => null);
+      console.error(`HTTP ${response.status}:`, err);
+      return;
+    }
+
+    const newWork = await response.json();
+    console.log("Work added:", newWork);
+
+    //mise à jour de la galerie
+    pieces.push(newWork);
+    genererPieces(pieces);
+    modalGalery(pieces);
+    closeModal();
+  } catch (err) {
+    console.error("Network error:", err);
+  }
 });
 
