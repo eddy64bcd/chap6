@@ -119,7 +119,7 @@ window.addEventListener("click", (event) => {
 btnModif.addEventListener("click", () => {
   modalGalery(pieces);
 });
-
+ 
 function modalGalery(works) {
   modale.style.display = "block";
   modalGaleryContent.innerHTML = "";
